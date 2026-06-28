@@ -11,9 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type Role = String
+enum Role {
+  admin
+  staff
+}
 
-type ValidationStatus = String
+enum ValidationStatus {
+  validado
+  em_validacao
+  nao_validado
+}
 
 // Conta assinante (tenant). Tudo no sistema pertence a uma Organization.
 model Organization {
