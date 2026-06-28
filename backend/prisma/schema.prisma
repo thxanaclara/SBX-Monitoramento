@@ -7,20 +7,13 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  admin
-  staff
-}
+type Role = String
 
-enum ValidationStatus {
-  validado
-  em_validacao
-  nao_validado
-}
+type ValidationStatus = String
 
 // Conta assinante (tenant). Tudo no sistema pertence a uma Organization.
 model Organization {
