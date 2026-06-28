@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import { authRouter } from "./routes/auth.js";
-import { categoriesRouter } from "./routes/categories.js";
-import { productsRouter } from "./routes/products.js";
-import { adsRouter } from "./routes/ads.js";
-import { usersRouter } from "./routes/users.js";
-import { webhooksRouter } from "./routes/webhooks.js";
+import { authRouter } from "./routes/auth";
+import { categoriesRouter } from "./routes/categories";
+import { productsRouter } from "./routes/products";
+import { adsRouter } from "./routes/ads";
+import { usersRouter } from "./routes/users";
+import { webhooksRouter } from "./routes/webhooks";
 
 export const app = express();
 
