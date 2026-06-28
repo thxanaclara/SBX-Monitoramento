@@ -1,0 +1,30 @@
+name: Sincronização de produtos (Shopee)
+
+# Roda a cada 10 minutos, direto no GitHub — não depende de nenhum
+# computador, navegador ou aba aberta.
+#
+# IMPORTANTE: como este projeto não usa mais um backend hospedado na nuvem
+# (Supabase), a API (pasta backend/) precisa estar rodando em algum lugar
+# acessível pela internet para este workflow conseguir chamá-la — por
+# exemplo um VPS pequeno, Railway, Render ou Fly.io. Veja o README para
+# opções de hospedagem.
+#
+# Configure em Settings > Secrets and variables > Actions deste repositório:
+#   API_URL        -> https://sua-api-publica.com (sem barra no final)
+#   SYNC_API_KEY    -> o mesmo valor de SYNC_API_KEY do .env do backend
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar sincronização na API
+        run: |
+          curl -sf -X POST "${{ secrets.API_URL }}/api/products/sync" \
+            -H "x-sync-api-key: ${{ secrets.SYNC_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{}'

@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "SBX Monitoramento — Captura Shopee",
+  "version": "1.0.0",
+  "description": "Envie produtos da Shopee direto para o SBX Monitoramento, sem copiar e colar o link.",
+  "action": { "default_popup": "popup.html" },
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://*.shopee.com.br/*"],
+  "options_page": "options.html",
+  "background": { "service_worker": "background.js" }
+}

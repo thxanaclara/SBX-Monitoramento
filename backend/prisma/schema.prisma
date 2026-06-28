@@ -1,0 +1,126 @@
+// Banco local (SQLite por padrão) — sem depender de nenhum serviço externo.
+// Para crescer além do uso inicial, troque o "provider" para "postgresql" e
+// ajuste a DATABASE_URL: o resto do código não muda, o Prisma abstrai isso.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  staff
+}
+
+enum ValidationStatus {
+  validado
+  em_validacao
+  nao_validado
+}
+
+// Conta assinante (tenant). Tudo no sistema pertence a uma Organization.
+model Organization {
+  id                 String   @id @default(uuid())
+  name               String
+  plan               String   @default("trial")
+  subscriptionStatus String   @default("trialing") // active | past_due | canceled | trialing
+  createdAt          DateTime @default(now())
+
+  users      User[]
+  categories ProductCategory[]
+  products   Product[]
+  ads        AdGeneration[]
+}
+
+model User {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  fullName       String
+  email          String   @unique
+  passwordHash   String
+  role           Role
+  createdAt      DateTime @default(now())
+
+  createdProducts Product[]      @relation("ProductCreatedBy")
+  ads             AdGeneration[]
+}
+
+model ProductCategory {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  createdAt      DateTime @default(now())
+
+  products Product[]
+
+  @@unique([organizationId, name])
+}
+
+model Product {
+  id               String           @id @default(uuid())
+  organizationId   String
+  organization     Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  categoryId       String?
+  category         ProductCategory? @relation(fields: [categoryId], references: [id])
+  shopeeUrl        String
+  name             String           @default("Sincronizando…")
+  imageUrl         String?
+  currentPrice     Float?
+  validationStatus ValidationStatus @default(nao_validado)
+  createdById      String?
+  createdBy        User?            @relation("ProductCreatedBy", fields: [createdById], references: [id])
+  postedOnShopeeAt DateTime?
+  lastSyncedAt     DateTime?
+  createdAt        DateTime         @default(now())
+
+  dailySales   DailySale[]
+  priceHistory PriceHistoryEntry[]
+  ads          AdGeneration[]
+
+  @@index([organizationId])
+}
+
+model DailySale {
+  id          String   @id @default(uuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  date        DateTime // armazenado à meia-noite, representa o dia (sem hora)
+  salesCount  Int      @default(0)
+  revenue     Float?
+
+  @@unique([productId, date])
+  @@index([productId, date])
+}
+
+model PriceHistoryEntry {
+  id         String   @id @default(uuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  recordedAt DateTime @default(now())
+  price      Float
+
+  @@index([productId, recordedAt])
+}
+
+model AdGeneration {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdById     String?
+  createdBy       User?        @relation(fields: [createdById], references: [id])
+  variationLabel  String
+  title           String
+  body            String
+  imageUrl        String?      // null se a geração de imagem estiver desativada/falhou
+  createdAt       DateTime     @default(now())
+
+  @@index([productId])
+}

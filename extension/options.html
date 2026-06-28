@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Configurações — SBX Monitoramento</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>SBX Monitoramento</h1>
+      <p class="muted">
+        Informe o endereço da sua API (a mesma usada pelo front-end web — local
+        durante o desenvolvimento, ou a URL pública depois de publicada) e faça login.
+      </p>
+
+      <label>URL da API</label>
+      <input id="apiUrl" type="text" placeholder="http://localhost:3001 ou https://sua-api.com" />
+
+      <hr />
+
+      <label>E-mail</label>
+      <input id="email" type="email" placeholder="ana@sbxmonitoramento.com.br" />
+
+      <label>Senha</label>
+      <input id="password" type="password" placeholder="••••••••" />
+
+      <button id="saveBtn">Salvar e entrar</button>
+      <p id="status" class="status"></p>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>SBX Monitoramento</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap popup">
+      <h1>SBX Monitoramento</h1>
+
+      <div id="notLoggedIn" class="hidden">
+        <p class="muted">Você ainda não está conectado.</p>
+        <button id="openOptions">Configurar acesso</button>
+      </div>
+
+      <div id="notShopee" class="hidden">
+        <p class="muted">Abra a página de um produto na Shopee para adicioná-lo ao monitoramento.</p>
+      </div>
+
+      <div id="readyToAdd" class="hidden">
+        <p class="muted">Adicionar este produto ao monitoramento:</p>
+        <label>Categoria</label>
+        <select id="categorySelect"></select>
+        <button id="addBtn">Adicionar produto</button>
+        <p id="status" class="status"></p>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
