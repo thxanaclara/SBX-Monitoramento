@@ -1,6 +1,6 @@
-import express from "express.js";
-import cors from "cors.js";
-import path from "path.js";
+import express from "express";
+import cors from "cors";
+import path from "path";
 import { authRouter } from "./routes/auth.js";
 import { categoriesRouter } from "./routes/categories.js";
 import { productsRouter } from "./routes/products.js";
@@ -16,7 +16,9 @@ app.use(express.json());
 // imagens geradas pelo gerador de anúncios ficam acessíveis aqui
 app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
 
-app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/health", (_req: express.Request, res: express.Response) => {
+  res.json({ ok: true });
+});
 
 app.use("/api/auth", authRouter);
 app.use("/api/categories", categoriesRouter);
